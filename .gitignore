@@ -5,5 +5,3 @@ Thumbs.db
 *.apk
 composer.lock
 vendor/
-data/
-tmp/
