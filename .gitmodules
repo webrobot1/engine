@@ -1,9 +1,6 @@
 [submodule "app/backend"]
 	path = app/backend
 	url = https://github.com/webrobot1/app-backend
-[submodule "app/game"]
-	path = app/game
-	url = https://github.com/webrobot1/app-game
 [submodule "app/help"]
 	path = app/help
 	url = https://github.com/webrobot1/app-help
