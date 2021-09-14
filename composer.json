@@ -15,8 +15,6 @@
 		"ext-redis": "*",
 		"ext-mysqli": "*",
 		"ext-mbstring": "*",
-		"ext-gd": "*",
-		"ext-libzip": "*",
 	
 			
         "smarty/smarty": "^3.1",
