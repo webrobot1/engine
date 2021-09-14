@@ -9,4 +9,4 @@ app/
 vendor/
 data/
 tmp/
-int.php
+cfg/
