@@ -10,15 +10,12 @@
     },
 	"require": {
 		"php": ">=8.0",
-		
+
 		"ext-curl": "*",
 		"ext-redis": "*",
 		"ext-mysqli": "*",
 		"ext-mbstring": "*",
-		"ext-gd": "*",
-		"ext-libzip": "*",
-	
-			
-        "smarty/smarty": "^3.1",
+		
+		"smarty/smarty": "^3.1"
     }
 }
