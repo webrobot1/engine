@@ -1,0 +1,25 @@
+<!DOCTYPE HTML>
+<html lang="en">
+	<head>
+		<meta charset=utf-8>
+		<title>{$smarty.const.APP|capitalize}</title>		
+		<link rel="stylesheet" type="text/css" href="/theme/default/css/jquery-ui.min.css"/>
+		<link rel="stylesheet" type="text/css" href="/theme/default/css/bootstrap.css"/>
+		<script type='text/javascript' src="/theme/default/js/jquery-3.1.1.js"></script>
+		<script type='text/javascript' src="/theme/default/js/jquery-ui.min.js"></script>
+		<script type='text/javascript' src="/theme/default/js/bootstrap.min.js"></script>	
+	</head>
+	<body>
+		<div class="col-lg-12">
+			{if $smarty.session.__result!==null}
+				<div class="alert alert-success">
+					{if $smarty.session.__result}{$smarty.session.__result}{else}Успешно{/if}
+				</div>
+			{/if}			
+			<div class='container-fluid'>
+				{$content}
+			</div>	
+		</div>
+		<br clear='all'/>
+	</body>
+</html>

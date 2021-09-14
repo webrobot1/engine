@@ -1,0 +1,33 @@
+<!DOCTYPE HTML>
+<html lang="en">
+	<head>
+		<meta charset=utf-8>
+		<title>Исключение</title>		
+		<link rel="stylesheet" type="text/css" href="/theme/default/css/bootstrap.css"/>
+	</head>
+	<body>
+		<style type='text/css'>
+			.page_404{ padding:40px 0; background:#fff; }
+			.four_zero_four_bg{
+				background-image: url(/theme/default/images/valera.gif);
+				height: 400px;
+				background-position: center;
+			 }	 			 		 
+		</style>
+		<section class="page_404">
+			<div class="container">
+				<div class="row">	
+					<div class="col-sm-12">
+						<div class="col-sm-10 col-sm-offset-1  text-center">
+							<div class="four_zero_four_bg">
+							</div>
+							<h2>Ошибка</h2>
+							<pre><?php echo htmlspecialchars((DEFINED("USER") && USER['login'] == 'admin') || $_SESSION['password']?$ex:$ex->getMessage());?></pre>
+							<a href="#" onclick="javascript:history.back()" class="btn btn-success">Назад</a>
+						</div>
+					</div>
+				</div>
+			</div>
+		</section>
+	</body>
+</html>

@@ -1,0 +1,46 @@
+{if $faq || $user.login == 'admin' || $user.permissions.help.applications.backend['save']}
+	<a style='color:#fff' data-toggle="modal" data-target="#FaqModal" href='#'>Помощь</a>	
+{/if}	
+
+{if $user.login == 'admin' || $smarty.const.USER.permissions.help.applications.backend['save']}
+	<link rel="stylesheet" type="text/css" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
+	<link rel="stylesheet" type="text/css" href="/app/help/theme/default/backend/css/wysiwyg.min.css">
+
+	<script type="module" src="/app/help/theme/default/backend/js/wysiwyg.min.js"></script>
+	<script type="module" src="/app/help/theme/default/backend/js/wysiwyg-editor.js"></script>
+	<script type='text/javascript' src="/app/help/theme/default/backend/js/main.js?{$smarty.now|date_format:'%Y%m%d'}"></script>
+{/if}
+
+<!-- Модальное окно -->
+<div class="modal fade" id="FaqModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+	<div class="modal-dialog modal-lg" role="document">
+		<div class="modal-content">
+			<div class="modal-header bg-primary">
+				<button type="button" class="close" data-dismiss="modal" aria-label="Закрыть">
+				  <span aria-hidden="true">×</span>
+				</button>
+				Справка
+			</div>
+			<div class="modal-body" id='faq' style='color:#000'>			
+			  {if $user.login == 'admin' || $user.permissions.help.applications.backend['save']}
+				<form method='POST' action='{"?app=help&page=backend&action=save&callback[app]=`$smarty.const.APP`&callback[page]=`$smarty.get.page`&callback[action]={if $smarty.get.action}{$smarty.get.action}{else}index{/if}"|set_query}'>
+					<div class="wysiwyg">
+						<textarea name="callback[text]">
+			  {/if}
+				{$faq}
+			  {if $user.login == 'admin' || $user.permissions.help.applications.backend['save']}
+						</textarea>
+					</div>
+					<br clear='all' />
+					<input class='btn btn-success' id='save_help' type='submit' value='Сохранить' />
+				</form>
+			  {/if}
+			</div>
+		</div>
+	</div>
+</div>	
+
+
+
+
+

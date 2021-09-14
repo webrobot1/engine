@@ -1,0 +1,164 @@
+@media screen and (max-width: 480px) {
+	.modal{
+		top:5% !important
+	}
+}
+a[href='###']{
+	display:none !important
+}
+
+.modal{
+	overflow-y:auto !important
+}
+
+#main_modal .modal-lg{
+	width:80%
+}
+h1, h2, h3{
+	margin-bottom:20px
+}
+#container{
+	padding-top:10px;
+}
+#magnify{
+	overflow-y:auto
+}
+nav.bg-primary a.dropdown-toggle{
+	color:#fff
+}
+.ui-datepicker-div{
+	z-index:999
+}
+.modal-content{
+	padding:5px 10px;
+	overflow-x:auto;
+	min-height:300px;
+}
+body{
+	padding-bottom:10px
+}
+
+html, body{
+	min-height:100%;
+	overflow: auto;
+	
+	/*
+		height:100%;
+	*/
+}
+.table.dataTable tbody th, table.dataTable tbody td{
+	padding:6px 6px !important
+}
+#fixed > tr th, #scrollbar{
+	z-index:1040
+}
+
+#scrollbar{position:relative; margin-left: 218px;} 
+table tr:first-child th{
+	position:relative;
+	background-color:#f9f9f9;
+	opacity:0.88
+}
+.ui-menu.ui-autocomplete{
+	z-index:9999
+}
+#fixed td, #fixed th{
+	height:45px;
+}
+#fixed{
+    width: 100%;
+}
+#fixed .fixed {
+   /* background-color: #0074d9;
+    color: #fff;*/
+    position: absolute;
+    left: 0;
+    width: 220px;
+	/*overflow-x: auto;*/
+}
+.fixed_outer {
+    position: relative
+}
+.fixed_inner {
+    overflow-x: scroll;
+   /* overflow-y: visible;
+     width: 100%; */
+    margin-left: 218px;
+}
+/* картинка на странице */
+.minimized {
+  cursor: pointer;
+  color:blue;
+  border: 1px solid #CCC;
+}
+ 
+.minimized:hover {
+  border: 1px solid yellow;
+}
+#faq img{
+	max-height:300px;
+	max-width:800px;
+	cursor:pointer
+}
+	
+/* увеличенная картинка */
+#magnify {
+  display: none;
+  background-color:#fff;
+  min-height:23px;
+  /* position: absolute; upd: 24.10.2016 */
+  position: fixed;
+  max-width: 600px;
+  height: auto;
+  z-index: 9999;
+}
+ 
+#magnify img {
+  width: 100%;
+}
+ 
+/* затемняющий фон */
+#overlay {
+  display: none;
+ 
+  background: #000;
+  position: fixed;
+  top: 0;
+  left: 0;
+  height: 100%;
+  width: 100%;
+  opacity: 0.5;
+  z-index: 9990;
+}
+ 
+/* кнопка закрытия */
+#close-popup {
+  width: 30px;
+  height: 30px;
+ 
+  background: #FFFFFF;
+  border: 1px solid #AFAFAF;
+  border-radius: 15px;
+  cursor: pointer;
+  position: absolute;
+  top: -15px;
+  right: -15px;
+}
+ 
+#close-popup i {
+  width: 30px;
+  height: 30px;
+  background: url(https://codernote.ru/files/cross.png) no-repeat center center;
+  background-size: 16px 16px;
+  display: block;
+}
+ 
+@keyframes rota {
+ 25% { transform: rotate(360deg); }
+}
+ 
+#close-popup:hover {
+  animation: rota 4s infinite normal;
+  -webkit-animation-iteration-count: 1;
+  animation-iteration-count: 1;
+}

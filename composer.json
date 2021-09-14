@@ -1,0 +1,24 @@
+{
+    "config": {
+        "platform-check": true
+    },
+    "autoload": {
+        "psr-4": {
+			"Edisom\\Core\\": "core/",
+			"Edisom\\App\\": "app/"
+		}
+    },
+	"require": {
+		"php": ">=8.0",
+		
+		"ext-curl": "*",
+		"ext-redis": "*",
+		"ext-mysqli": "*",
+		"ext-mbstring": "*",
+		"ext-gd": "*",
+		"ext-libzip": "*",
+	
+			
+        "smarty/smarty": "^3.1",
+    }
+}

@@ -1,0 +1,26 @@
+{if $count}
+	{if !$limit}
+		{assign var='limit' value='100'}
+	{/if}
+	
+	<nav aria-label="...">
+	  <ul class="pagination">
+		<li class="page-item{if !$smarty.get.callback.page} disabled{/if}">
+		  {if !empty($smarty.get.callback.page)}<a class="page-link" href="{"callback[page]=`$smarty.get.callback.page-1`}"|set_query}">{else}<span class="page-link">{/if}
+			Previous
+		  {if !empty($smarty.get.callback.page)}</a>{else}</span>{/if}
+		</li>
+		{for $page=0 to ceil($count/$limit)-1}
+			<li class="page-item {if $page == $smarty.get.callback.page}disabled{/if}"><a class="page-link" href="{"callback[page]=`$page`"|set_query}">{$page+1}</a></li>
+		{/for}
+		<li class="page-item{if $count<=$limit || $smarty.get.callback.page && $smarty.get.callback.page * $limit > $count} disabled{/if}">
+			{if (empty($smarty.get.callback.page) && $count>$limit) || $smarty.get.callback.page * $limit < $count}
+				<a class="page-link" href="{"callback[page]=`$smarty.get.callback.page+1`"|set_query}">Next</a>
+			{else}
+				<span class="page-link">Next</span>
+			{/if}
+		</li>
+	  </ul>
+	</nav>
+{/if}
+<p>Всего {$count} записей</p>

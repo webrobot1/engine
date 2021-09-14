@@ -1,0 +1,9 @@
+Thumbs.db
+.idea/
+*.zip
+*.rar
+*.apk
+composer.lock
+vendor/
+data/
+tmp/
