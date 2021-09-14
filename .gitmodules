@@ -1,18 +1,9 @@
 [submodule "app/backend"]
 	path = app/backend
 	url = https://github.com/webrobot1/app-backend
-[submodule "app/game"]
-	path = app/game
-	url = https://github.com/webrobot1/app-game
 [submodule "app/help"]
 	path = app/help
 	url = https://github.com/webrobot1/app-help
-[submodule "app/map"]
-	path = app/map
-	url = https://github.com/webrobot1/app-map
-[submodule "app/server"]
-	path = app/server
-	url = https://github.com/webrobot1/app-server
 [submodule "app/user"]
 	path = app/user
 	url = https://github.com/webrobot1/app-user
