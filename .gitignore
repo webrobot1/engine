@@ -4,6 +4,7 @@ Thumbs.db
 *.rar
 *.apk
 composer.lock
+composer.json
 .gitmodules
 app/
 vendor/
