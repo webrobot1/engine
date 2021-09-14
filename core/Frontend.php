@@ -104,6 +104,5 @@ abstract class Frontend extends Controller
 		if($this->redirect){
 			header("Location: ".$this->redirect);	
 		}
-		parent::__destruct();
 	}	
 }
