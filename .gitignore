@@ -7,6 +7,8 @@ composer.lock
 composer.json
 .gitmodules
 app/
+!app/README.MD
+!app/.htaccess
 vendor/
 data/
 tmp/

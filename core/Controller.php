@@ -118,9 +118,4 @@ abstract class Controller
         unset($_GET[$name]);
         unset($_POST[$name]);
     }
-	
-	function __destruct()
-	{	
-
-	}
 }
