@@ -1,4 +1,3 @@
-[submodule "app-backend"]
+[submodule "app/backend"]
 	path = app/backend
 	url = https://github.com/webrobot1/app-backend
-	branch = master
