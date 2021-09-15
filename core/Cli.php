@@ -58,11 +58,11 @@ final class Cli
 		$code = null;
 		
 		exec($cmd, $output, $code); //(substr(php_uname(), 0, 7) == "Windows"?pclose(popen("start /B ". $cmd, "r")):
-		
-		switch($code)
-		{	
-			$output = trim(implode("\r\n", $output));
+					
+		$output = trim(implode("\r\n", $output));
 			
+		switch($code)
+		{
 			case EXCEPTION_CODE:
 				throw new \Exception('Ошибка выполнения операции '.$cmd.': '.$output);	
 			break;								
