@@ -60,15 +60,17 @@ final class Cli
 		exec($cmd, $output, $code); //(substr(php_uname(), 0, 7) == "Windows"?pclose(popen("start /B ". $cmd, "r")):
 		
 		switch($code)
-		{				
+		{	
+			$output = trim(implode("\r\n", $output));
+			
 			case EXCEPTION_CODE:
 				throw new \Exception('Ошибка выполнения операции '.$cmd.': '.$output);	
 			break;								
 			case FORBIDDEN_CODE:
-				throw new \Exception('Доступ закрыт для операции '.$cmd.'');	
+				throw new \Exception('Доступ закрыт для операции '.$cmd.': '.$output);	
 			break;					
 			default:
-				return trim(implode("\r\n", $output));
+				return $output;
 			break;	
 		}
 	}
