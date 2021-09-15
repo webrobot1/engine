@@ -62,7 +62,7 @@ final class Cli
 		switch($code)
 		{				
 			case EXCEPTION_CODE:
-				throw new \Exception('Ошибка выполнения операции '.$cmd.': '.$cmd);	
+				throw new \Exception('Ошибка выполнения операции '.$cmd.': '.$output);	
 			break;								
 			case FORBIDDEN_CODE:
 				throw new \Exception('Доступ закрыт для операции '.$cmd.'');	
