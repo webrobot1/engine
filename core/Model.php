@@ -322,7 +322,7 @@ abstract class Model
 		return $curlResponse;
 	}  
 	
-	final public static function upload(string $tmp_name, string $name)
+	final public static function upload(string $tmp_name, string $name, bool $override = false)
 	{
 		$name = basename(trim($name));
 		$dir = SITE_PATH."/data/".static::app().'/';
@@ -330,8 +330,11 @@ abstract class Model
 		if(!file_exists($dir))
 			mkdir($dir);
 		
-		while(file_exists($dir.$name))
-			$name = rand(0,9).$name;
+		if(!$override)
+		{
+			while(file_exists($dir.$name))
+				$name = rand(0,9).$name;
+		}
 		
 		if(substr($tmp_name, 0, 4)!='http' && move_uploaded_file($tmp_name, $dir.$name)!==false)
 			return $name;
