@@ -218,7 +218,7 @@ class Template extends \Smarty
 								switch($key)
 								{
 									case 'ru_utime.tv_sec':
-									case 'ru_utime.tv_sec':
+									case 'ru_stime.tv_sec':
 										continue;
 									break;
 									case 'ru_utime.tv_usec':
