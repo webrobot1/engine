@@ -10,7 +10,7 @@ abstract class Backend extends Frontend
 		// todo plugin систему сделать	
 		
 		############шаблонизатор###############
-		$this->view->backend = true;
+		$this->view::$backend = true;
 
 		$this->view->assign("faq", \Edisom\App\help\model\BackendModel::getInstance()->faq(null, array('app'=>APP, 'page'=>$this->page, 'action'=>($this->action?$this->action:'index'))));
 		
