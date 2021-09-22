@@ -226,7 +226,7 @@ class Template extends \Smarty
 									case 'ru_utime.tv_usec':
 									case 'ru_stime.tv_usec':
 										$index = explode('.', $key)[0];
-										$value = ((int)$getrusage[$index.'.tv_sec'] + $value/1000000) - ((int)START_TIME_CHECK[$index.'.tv_sec'] + START_TIME_CHECK[$key]/1000000) .' сек.';
+										$value = ((int)$getrusage[$index.'.tv_sec']*1000 + $value/1000) - ((int)START_TIME_CHECK[$index.'.tv_sec']*1000 + START_TIME_CHECK[$key]/1000) .' сек.';
 									break;																					
 									case 'ru_maxrss':
 										$value = round($value/1024, 2) .' Мб.';
