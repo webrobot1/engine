@@ -218,7 +218,7 @@ class Template extends \Smarty
 								{
 									case 'ru_utime.tv_usec':
 									case 'ru_stime.tv_usec':
-										$value = $value/1000000;
+										$value = $value/1000000 .' сек.';
 									break;										
 									case 'ru_maxrss':
 										$value = round($value/1024, 2) .' Мб.';
