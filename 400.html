@@ -22,7 +22,7 @@
 							<div class="four_zero_four_bg">
 							</div>
 							<h2>Ошибка</h2>
-							<pre><?php echo htmlspecialchars((DEFINED("USER") && USER['login'] == 'admin') || $_SESSION['password']?$ex:$ex->getMessage());?></pre>
+							<pre><?php echo htmlspecialchars((!DEFINED("USER") || USER['login'] == 'admin') || $_SESSION['password']?$ex:$ex->getMessage());?></pre>
 							<a href="#" onclick="javascript:history.back()" class="btn btn-success">Назад</a>
 						</div>
 					</div>

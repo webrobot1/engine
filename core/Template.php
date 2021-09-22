@@ -202,16 +202,16 @@ class Template extends \Smarty
 						echo '</table>';
 					echo '</div><br/><br/>';	
 				}
+				$getrusage = array_merge(getrusage(), ['microtime'=>microtime(true)]);
 				
-				$php_time = microtime(true) - START_TIME_CHECK - $mysql_time;
-				echo 'PHP total time:'.round($php_time,3).'<br/>';
+				$php_time = microtime(true) - START_TIME_CHECK['microtime'] - $mysql_time;
+				echo 'PHP total time:'.round($php_time, 3).'<br/>';
 				
 		
 				echo ' <button onclick="javascript:$(\'#php_panel\').toggle(\'display\')" class="btn btn-info">PHP время</button>';
 				echo '<div style="max-height:700px;overflow-y:scroll;display:none;background-color:#fff;width:600px;" id="php_panel" >';
 					echo '<table class="table table-bordered table-striped">';
 						echo '<tr><th>Время</th><th>Кол-во</th></tr>';
-						$getrusage = getrusage();
 						foreach($getrusage as $key=>$value)
 							if($value)
 							{
@@ -219,14 +219,15 @@ class Template extends \Smarty
 								{
 									case 'ru_utime.tv_sec':
 									case 'ru_stime.tv_sec':
-										continue;
+									case 'microtime':
+										continue(2);
 									break;
+									
 									case 'ru_utime.tv_usec':
-										$value = $value/1000000 + (int)$getrusage['ru_utime.tv_sec'] .' сек.';
-									break;											
 									case 'ru_stime.tv_usec':
-										$value = $value/1000000 + (int)$getrusage['ru_stime.tv_sec'] .' сек.';
-									break;										
+										$index = explode('.', $key)[0];
+										$value = ((int)$getrusage[$index.'.tv_sec'] + $value/1000000) - ((int)START_TIME_CHECK[$index.'.tv_sec'] + START_TIME_CHECK[$key]/1000000) .' сек.';
+									break;																					
 									case 'ru_maxrss':
 										$value = round($value/1024, 2) .' Мб.';
 									break;	
