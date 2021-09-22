@@ -1,13 +1,12 @@
 <?php
 namespace Edisom\Core;
-use \Edisom\App\help\model\BackendModel as Translate;
 
 // класс обертка для акещтеутв и backend
 // может использоваться как адаптер для других шабьлонизиторов
 class Template extends \Smarty
 {	
 	static $instances = null;
-	public static $backend = false;
+	public $backend = false;
 	
     public static function getInstance()
     {
@@ -94,7 +93,7 @@ class Template extends \Smarty
 		unset($newGetVars['referer']);
 		
 		if(empty($newGetVars['page'])){
-			if(static::$backend && @$newGetVars['page']!='frontend')
+			if($this->backend && @$newGetVars['page']!='frontend')
 				$newGetVars['page'] = 'backend';
 			else
 				$newGetVars['page'] = 'frontend';
@@ -104,7 +103,7 @@ class Template extends \Smarty
 			$newGetVars['action'] = 'index';
 		
 		if(
-            static::$backend 
+            $this->backend 
                 && 
             $newGetVars['page']!='frontend' 
                 && 
@@ -192,52 +191,21 @@ class Template extends \Smarty
 						}
 					}
 				}
+
 				echo 'Mysql total time:'.round($mysql_time, 3).'<br/>';	
+				
 				if($string){
-					echo ' <button onclick="javascript:$(\'#mysql_panel\').toggle(\'display\')" class="btn btn-info">SQl запросы</button>';
-					echo '<div style="max-height:700px;overflow-y:scroll;display:none;background-color:#fff;width:600px;" id="mysql_panel" >';
+					echo ' <button onclick="javascript:$(\'#debug_panel\').toggle(\'display\')" class="btn btn-info">SQl запросы</button>';
+					echo '<div style="max-height:700px;overflow-y:scroll;display:none;background-color:#fff;width:600px;" id="debug_panel" >';
 						echo '<table class="table table-bordered table-striped">';
 							echo '<tr><th>Время</th><th>Кол-во</th><th>Запрос</th></tr>';
 							echo $string;
 						echo '</table>';
 					echo '</div><br/><br/>';	
 				}
-				$getrusage = array_merge(getrusage(), ['microtime'=>microtime(true)]);
 				
-				$php_time = microtime(true) - START_TIME_CHECK['microtime'] - $mysql_time;
-				echo 'PHP total time:'.round($php_time, 3).'<br/>';
-				
-		
-				echo ' <button onclick="javascript:$(\'#php_panel\').toggle(\'display\')" class="btn btn-info">PHP время</button>';
-				echo '<div style="max-height:700px;overflow-y:scroll;display:none;background-color:#fff;width:600px;" id="php_panel" >';
-					echo '<table class="table table-bordered table-striped">';
-						echo '<tr><th>Время</th><th>Кол-во</th></tr>';
-						foreach($getrusage as $key=>$value)
-							if($value)
-							{
-								switch($key)
-								{
-									case 'ru_utime.tv_sec':
-									case 'ru_stime.tv_sec':
-									case 'microtime':
-										continue(2);
-									break;
-									
-									case 'ru_utime.tv_usec':
-									case 'ru_stime.tv_usec':
-										$index = explode('.', $key)[0];
-										$value = ((int)$getrusage[$index.'.tv_sec'] + $value/1000000) - ((int)START_TIME_CHECK[$index.'.tv_sec'] + START_TIME_CHECK[$key]/1000000) .' сек.';
-									break;																					
-									case 'ru_maxrss':
-										$value = round($value/1024, 2) .' Мб.';
-									break;	
-								}
-								
-								echo "<tr><td>".Translate::translate($key)."</td><td colspan='2'>".$value."</td></tr>\n";
-								
-							}
-					echo '</table>';
-				echo '</div><br/><br/>';				
+				$php_time = microtime(true) - START_TIME_CHECK - $mysql_time;
+				echo 'PHP total time:'.round($php_time,3).'<br/>';
 				
 				echo 'HTML total time: <span id="html_time"></span>';
 				echo '<div id="total_time" class="hidden">Total time: <span></span> сек.</div>';
@@ -255,7 +223,6 @@ class Template extends \Smarty
 				</script>';
 						
 			echo '</center>';
-			die();
 		}	
 		exit();
 	}

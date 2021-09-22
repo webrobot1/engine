@@ -3,15 +3,13 @@ declare(strict_types=1);
 setlocale(LC_TIME, 'ru_RU.UTF-8');
 date_default_timezone_set('Europe/Moscow');
 
-if(PHP_SAPI !== 'cli')
-	DEFINE('START_TIME_CHECK', array_merge(getrusage(), ['microtime'=>microtime(true)]) ); // для счетчика
-
 require_once __DIR__ . '/vendor/autoload.php';
 error_reporting(E_ALL & ~E_NOTICE & ~E_STRICT & ~E_DEPRECATED );
 
 bcscale(2);
 DEFINE('DEBUG', 1);
 
+ini_set('session.gc_maxlifetime', '28800');
 if(DEFINED("DEBUG") && DEBUG){
 	ini_set('display_errors', 'On');
 	ini_set('display_startup_errors', 'On');
@@ -22,14 +20,18 @@ DEFINE('SITE_PATH', rtrim(str_replace("\\", "/", realpath(dirname(__FILE__))), '
 // коды возврата ошибок для CLI режима
 DEFINE('NOT_FOUND_CODE', 2);
 DEFINE('FORBIDDEN_CODE', 3);
+
 DEFINE('PAGE_LIMIT', 50); 
 
 if(PHP_SAPI === 'cli' && $argv[1]) { // cli режим
 	Edisom\Core\Cli::run();
 }else{
-	ini_set('session.gc_maxlifetime', '28800');
+	DEFINE('START_TIME_CHECK', microtime(true)); // для счетчика
+	
 	set_time_limit(430);
 	
+	DEFINE('SITE_URL', (!empty($_SERVER['HTTPS']) ? 'https' : 'http') . '://' . $_SERVER['HTTP_HOST']);
+
 	// приложение контроллер и action по умолчанию
 	$path = array('backend', 'backend', 'index');
 	
