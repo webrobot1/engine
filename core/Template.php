@@ -223,7 +223,7 @@ class Template extends \Smarty
 				</script>';
 						
 			echo '</center>';
-			die(print_r(getrusage(1)));
+			die(print_r(getrusage()));
 		}	
 		exit();
 	}
