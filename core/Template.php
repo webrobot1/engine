@@ -211,14 +211,21 @@ class Template extends \Smarty
 				echo '<div style="max-height:700px;overflow-y:scroll;display:none;background-color:#fff;width:600px;" id="php_panel" >';
 					echo '<table class="table table-bordered table-striped">';
 						echo '<tr><th>Время</th><th>Кол-во</th></tr>';
-						foreach(getrusage() as $key=>$value)
+						$getrusage = getrusage();
+						foreach( as $key=>$value)
 							if($value)
 							{
 								switch($key)
 								{
+									case 'ru_utime.tv_sec':
+									case 'ru_utime.tv_sec':
+										continue;
+									break;
 									case 'ru_utime.tv_usec':
+										$value = $value/1000000 + (int)$getrusage['ru_utime.tv_sec'] .' сек.';
+									break;											
 									case 'ru_stime.tv_usec':
-										$value = $value/1000000 .' сек.';
+										$value = $value/1000000 + (int)$getrusage['ru_stime.tv_sec'] .' сек.';
 									break;										
 									case 'ru_maxrss':
 										$value = round($value/1024, 2) .' Мб.';
