@@ -212,7 +212,7 @@ class Template extends \Smarty
 					echo '<table class="table table-bordered table-striped">';
 						echo '<tr><th>Время</th><th>Кол-во</th></tr>';
 						$getrusage = getrusage();
-						foreach( as $key=>$value)
+						foreach($getrusage as $key=>$value)
 							if($value)
 							{
 								switch($key)
