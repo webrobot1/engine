@@ -213,7 +213,18 @@ class Template extends \Smarty
 						echo '<tr><th>Время</th><th>Кол-во</th></tr>';
 						foreach(getrusage() as $key=>$value)
 							if($value)
+							{
+								switch($key)
+								{
+									case 'ru_utime.tv_usec':
+									case 'ru_stime.tv_usec':
+									
+									break;	
+								}
+								
 								echo "<tr><td>".Translate::translate($key)."</td><td colspan='2'>".$value."</td></tr>\n";
+								
+							}
 					echo '</table>';
 				echo '</div><br/><br/>';				
 				
