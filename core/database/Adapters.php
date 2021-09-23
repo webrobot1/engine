@@ -5,7 +5,8 @@ abstract class Adapters
 {	
 	protected $bd;
 	private static string $host;
-	private static string $ip;
+	private static string $local_ip;
+	private static string $remote_ip;
 	
 	public bool $transaction = false;
 	
@@ -13,16 +14,14 @@ abstract class Adapters
 	{
 		if(empty(static::$host))
 		{
+			exec('ifconfig -a|grep inet|grep -v 127.0.0.1|grep -v inet6|awk \'{print $2}\'|tr -d "addr:"', $ip);
+			static::$remote_ip = $ip[0];
+			
 			static::$host = gethostname();
-			static::$ip = gethostbyname(static::$host);
-		}
-		
-		if($config['host']==static::$ip || $config['host']==$_SERVER['SERVER_ADDR']){
+			static::$local_ip = gethostbyname(static::$host);
+		}	
+		if($config['host']==static::$local_ip || $config['host']==$_SERVER['SERVER_ADDR'] || $config['host']==static::$remote_ip){
 			$config['host'] = static::$host;
-		}
-		else{
-			    exec('ifconfig -a|grep inet|grep -v 127.0.0.1|grep -v inet6|awk \'{print $2}\'|tr -d "addr:"',$arr);
-			throw new \Exception(print_r($arr, true).'|'.static::$ip);
 		}
 		
 		$this->connect($config);
