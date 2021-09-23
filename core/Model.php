@@ -343,14 +343,14 @@ abstract class Model
 	}
 	
 	
-	// стараться избегать вызов логов в высокоскоростных системах (DateTime долгая функция в )
+	// стараться избегать вызов логов в высокоскоростных системах (DateTime занимает 0,0003 сек)
 	public static function log(string|array $comment, string $file = 'main.log', $append = true)
 	{
 		file_put_contents
 		(
 			static::temp().$file
 				, 
-			($append? date("Y-m-d H:i:s:v").' ':'').trim(implode(($append?"\r\n":', '), (array)$comment)).($append?"\r\n":'')
+			($append? (new \DateTime())->format("Y-m-d H:i:s:v").' ':'').trim(implode(($append?"\r\n":', '), (array)$comment)).($append?"\r\n":'')
 				,
 			($append && file_exists(static::temp().$file)?FILE_APPEND:null)
 		);	
