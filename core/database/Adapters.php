@@ -17,9 +17,11 @@ abstract class Adapters
 			static::$ip = gethostbyname(static::$host);
 		}
 		
-		if($config['host']==static::$host || $config['host']==static::$ip){
+		if($config['host']==static::$ip || $config['host']==$_SERVER['SERVER_ADDR']){
 			$config['host'] = static::$host;
 		}
+		else
+			throw new \Exception('host '.static::$host.', ip '.static::$ip);
 		
 		$this->connect($config);
 	}
