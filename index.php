@@ -1,7 +1,6 @@
 <?php
 declare(strict_types=1);
 setlocale(LC_TIME, 'ru_RU.UTF-8');
-date_default_timezone_set('Europe/Moscow');
 
 if(PHP_SAPI !== 'cli')
 	DEFINE('START_TIME_CHECK', array_merge(getrusage(), ['microtime'=>microtime(true)]) ); // для счетчика
