@@ -38,8 +38,6 @@ abstract class Frontend extends Controller
 			$this->view->addTemplateDir('./theme/default');		
 		}
 		
-		$this->view->registerPlugin('modifier', "translate", array(\Edisom\App\help\model\BackendModel::getInstance(), 'translate'));
-		
 		$this->view->addTemplateDir(SITE_PATH.'/theme/'.$this->view->getTheme());		
 		$this->view->addTemplateDir('./theme/'.$this->view->getTheme());	
 	}

@@ -146,14 +146,19 @@ class Template extends \Smarty
 		return (DEFINED('USER') && USER['default_theme']?USER['default_theme']:'default');
 	}
 		
-	function display($template = NULL, $cache_id = NULL, $compile_id = NULL, $parent = NULL){
+	function display($template = NULL, $cache_id = NULL, $compile_id = NULL, $parent = NULL
+	){
 		header('Content-Type: text/html; charset=utf-8', true);
 		
 		if($template == 'index.html') 
 			throw new \Exception('Нельзя вызывать index фаил');		
 		
 		$_SESSION['HTTP_REFERER'] = $_SERVER['REQUEST_URI'];
-				
+		
+		// только в админке у нас есть раздел Помошь
+		if(static::$backend)
+			$this->registerPlugin('modifier', "translate", array(\Edisom\App\help\model\BackendModel::getInstance(), 'translate'));
+		
 		if(!empty(getallheaders()['X-Requested-With']))
 		{
 			parent::display($template, $cache_id , $compile_id , $parent );	

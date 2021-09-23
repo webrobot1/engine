@@ -4,10 +4,23 @@ namespace Edisom\Core\database;
 abstract class Adapters 
 {	
 	protected $bd;
+	private static string $host;
+	private static string $ip;
 	
 	public bool $transaction = false;
 	
-	function __construct($config){
+	function __construct(array $config)
+	{
+		if(empty(static::$host))
+		{
+			static::$host = gethostname();
+			static::$ip = gethostbyname(static::$host);
+		}
+		
+		if($config['host']==static::$host || $config['host']==static::$ip){
+			$config['host'] = static::$host;
+		}
+		
 		$this->connect($config);
 	}
 	

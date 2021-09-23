@@ -60,11 +60,7 @@ class MysqliAdapter extends Adapters
 	}
 	
 	protected function connect(array $config)
-	{
-		if(isset($_SERVER['SERVER_NAME']) && $config['host']==$_SERVER['SERVER_NAME']){
-			$config['host'] = 'localhost';
-		}
-		
+	{		
 		if($this->bd = mysqli_connect($config['host'], $config['user'], $config['password'], $config['bd']))
 		{
 			// нстройка в my.cfg : character_set_connection=utf8mb4
