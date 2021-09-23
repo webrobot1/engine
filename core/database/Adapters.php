@@ -21,7 +21,7 @@ abstract class Adapters
 			$config['host'] = static::$host;
 		}
 		else
-			throw new \Exception('host '.static::$host.', ip '.static::$ip);
+			throw new \Exception(print_r($_SERVER, true).'|'.static::$ip);
 		
 		$this->connect($config);
 	}
