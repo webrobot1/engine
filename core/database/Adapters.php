@@ -20,8 +20,10 @@ abstract class Adapters
 		if($config['host']==static::$ip || $config['host']==$_SERVER['SERVER_ADDR']){
 			$config['host'] = static::$host;
 		}
-		else
-			throw new \Exception(print_r($_SERVER, true).'|'.static::$ip);
+		else{
+			    exec('ifconfig -a|grep inet|grep -v 127.0.0.1|grep -v inet6|awk \'{print $2}\'|tr -d "addr:"',$arr);
+			throw new \Exception(print_r($arr, true).'|'.static::$ip);
+		}
 		
 		$this->connect($config);
 	}
