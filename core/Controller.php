@@ -21,6 +21,11 @@ abstract class Controller
 				static::_404("не найден class:".$model);
 		}
 		
+		if(isset($_SERVER['REQUEST_METHOD']) && $_SERVER['REQUEST_METHOD'] == 'PUT')
+			$_POST['request'] = file_get_contents("php://input");
+		
+		$query = array_replace_recursive((array)$query, (array)$_GET, (array)$_POST);
+		
 		// записываем переменные из query строки в this[vars], запретим переопределять свйоства класса				
 		foreach($query as $key=>&$value){
 			if(!property_exists($this, $key))

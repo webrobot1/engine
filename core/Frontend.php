@@ -25,11 +25,6 @@ abstract class Frontend extends Controller
 				$query = json_decode(urldecode($query), true);
 		}
 		
-		if(isset($_SERVER['REQUEST_METHOD']) && $_SERVER['REQUEST_METHOD'] == 'PUT')
-			$_POST['request'] = file_get_contents("php://input");
-		
-		$query = array_replace_recursive((array)$query, (array)$_GET, (array)$_POST);	
-		
 		// а теперь запишем из адресной строки параметры (я их в json пакую)
 		parent::__construct($query);
 	
