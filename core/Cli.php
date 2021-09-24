@@ -1,8 +1,4 @@
 <?php
-/*
-	В токене зашифрована вызываемая модель и ее action
-*/
-
 namespace Edisom\Core;
 
 set_time_limit(0);
