@@ -58,11 +58,13 @@ if(PHP_SAPI === 'cli' && $argv[1]) { // cli режим
 			$controller = new $class($query);
 			
 			if($query)
-			{
 				// передадим в метод лишь те параметры (из брауезрной строки, GET и POST) что у него есть в атрибутах (а там уже првоерка типа будет и тп)
 				$query = array_intersect_key($query, array_column((new \ReflectionClass($controller))->getMethod($action)->getParameters(), 'name', 'name'));
-			}	
-			$controller->$action(...$query);
+			
+			if($query)
+				$controller->$action(...$query);
+			else
+				$controller->$action();
 		}
 		else
 			\Edisom\Core\Controller::_404("не найден класс контроллера ".$class.' в фаиле '.$file);
