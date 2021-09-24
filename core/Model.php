@@ -108,6 +108,8 @@ abstract class Model
 		
 	public function exceptionHandler($ex)
 	{
+		// оставляем вывод что бы мы могли видеть ошибки в консоле
+		echo $ex->getMessage();
 		static::log($ex, 'error.log');
 		exit(EXCEPTION_CODE);
 	}	
