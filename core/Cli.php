@@ -85,13 +85,13 @@ final class Cli
 	// удалить крон задание
 	public static function delete(string $class, string $action=null, string $params = null)
 	{
-		static::cmd('crontab -u '.get_current_user().' -l | grep -v "^[0-9*/ ,\-]* '.static::get($class, $action, $params).'\( >.*\)*$" | crontab -');
+		static::cmd('crontab -u '.get_current_user().' -l | grep -v "^[0-9*/ ,\-]* php [^ ]* '.static::token($class, $action).($params?' '.$params:'').' > .*$" | crontab -');
 	}
 	
 	// првоерить крон задание
 	public static function check(string $class, string $action=null, string $params = null)
 	{
-		return static::cmd('crontab -u '.get_current_user().' -l | grep "^[0-9*/ ,\-]* '.static::get($class, $action, $params).'\( >.*\)*$"');
+		return static::cmd('crontab -u '.get_current_user().' -l | grep "^[0-9*/ ,\-]* php [^ ]* '.static::token($class, $action).($params?' '.$params:'').' > .*$"');
 	}
 	
 	// получить команду Cli уже с вшитым токеном (где указана вызываемая модель и action при необходимости)
