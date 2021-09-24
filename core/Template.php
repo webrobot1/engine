@@ -198,7 +198,7 @@ class Template extends \Smarty
 				}
 				$getrusage = array_merge(getrusage(), ['microtime'=>microtime(true)]);
 				
-				$php_time = microtime(true) - $_SERVER['REQUEST_TIME'] - $mysql_time;
+				$php_time = microtime(true) - START_TIME_CHECK['microtime'] - $mysql_time;
 				echo 'PHP total time:'.round($php_time, 3).'<br/>';
 				
 		

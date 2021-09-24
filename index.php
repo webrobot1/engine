@@ -4,8 +4,7 @@ setlocale(LC_TIME, 'ru_RU.UTF-8');
 // настроить в php.ini - слишком много времени занмиает вызов
 //date_default_timezone_set('Europe/Moscow');
 
-if(PHP_SAPI !== 'cli')
-	DEFINE('START_TIME_CHECK', getrusage()); // для счетчика
+DEFINE('START_TIME_CHECK', array_merge(getrusage(), ['microtime'=>microtime(true)])); // для счетчика // для счетчика
 
 require_once __DIR__ . '/vendor/autoload.php';
 error_reporting(E_ALL & ~E_NOTICE & ~E_STRICT & ~E_DEPRECATED );
