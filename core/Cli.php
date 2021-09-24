@@ -71,7 +71,7 @@ final class Cli
 	}
 	
 	// добавить крон задание
-	public static function add(string $time, string $class, string $action, array $params = null, string $output = null, $quiet = false){
+	public static function add(string $time, string $class, string $action, string $params = null, string $output = null, $quiet = false){
 		static::cmd('crontab -u '.get_current_user().' -l > mycron
 			#echo new cron into cron file
 			echo "'.$time.' '.static::get($class, $action, $params, $output, $quiet).'" >> mycron
@@ -82,21 +82,21 @@ final class Cli
 	}
 	
 	// удалить крон задание
-	public static function delete(string $class, string $action, array $params = null)
+	public static function delete(string $class, string $action, string $params = null)
 	{
-		static::cmd('crontab -u '.get_current_user().' -l | grep -v "^[0-9*/ ,\-]* php [^ ]* '.static::encode(['class'=>$class, 'action'=>$action]).($params?' '.static::encode($params):'').' > .*$" | crontab -');
+		static::cmd('crontab -u '.get_current_user().' -l | grep -v "^[0-9*/ ,\-]* php [^ ]* '.static::encode(['class'=>$class, 'action'=>$action]).($params?' '.$params:'').' > .*$" | crontab -');
 	}
 	
 	// првоерить крон задание
-	public static function check(string $class, string $action=null, array $params = null)
+	public static function check(string $class, string $action=null, string $params = null)
 	{
-		return static::cmd('crontab -u '.get_current_user().' -l | grep "^[0-9*/ ,\-]* php [^ ]* '.static::encode(['class'=>$class, 'action'=>$action]).($params?' '.static::encode($params):'').'( > .*$)?$"');
+		return static::cmd('crontab -u '.get_current_user().' -l | grep "^[0-9*/ ,\-]* php [^ ]* '.static::encode(['class'=>$class, 'action'=>$action]).($params?' '.$params:'').'( > .*$)?$"');
 	}
 	
 	// получить команду Cli уже с вшитым токеном (где указана вызываемая модель и action при необходимости)
-	final static public function get(string $class, string $action, array $params = null, string $output = null, $quiet = false):string
+	final static public function get(string $class, string $action, string $params = null, string $output = null, $quiet = false):string
 	{				
-		return "php ".SITE_PATH."/index.php ".static::encode(['class'=>$class, 'action'=>$action]).($params?' '.static::encode($params):'').($output||$quiet?' > ':'').($output?SITE_PATH.'/tmp/'.$output.' 2>&1':($quiet?'/dev/null':'')).($quiet?' &':'');;		
+		return "php ".SITE_PATH."/index.php ".static::encode(['class'=>$class, 'action'=>$action]).($params?' '.$params:'').($output||$quiet?' > ':'').($output?SITE_PATH.'/tmp/'.$output.' 2>&1':($quiet?'/dev/null':'')).($quiet?' &':'');;		
 	}	
 	
 	// завершить процесс
