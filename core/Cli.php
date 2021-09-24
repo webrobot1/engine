@@ -97,7 +97,7 @@ final class Cli
 	// получить команду Cli уже с вшитым токеном (где указана вызываемая модель и action при необходимости)
 	final static public function get(string $class, string $action=null, string $params = null, string $output = null, $quiet = false):string
 	{				
-		return "php ".SITE_PATH."/index.php ".static::token($class, $action).($params?' '.$params:'').($output?' > '.SITE_PATH.'/tmp/'.$output:'').' '.($quiet?'&':'2>&1');		
+		return "php ".SITE_PATH."/index.php ".static::token($class, $action).($params?' '.$params:'').' > '.($output?SITE_PATH.'/tmp/'.$output:'/dev/null').' 2>&1 '.($quiet?'&':'');		
 	}	
 	
 	// завершить процесс
