@@ -24,7 +24,7 @@ final class Cli
 		{
 			if(!$argv[1]['class'])
 				throw new \Exception('не указан класс вызова');	
-			if(!$action = $argv[1]['action'])
+			if(!$action = $argv[3] = $argv[1]['action'])
 				throw new \Exception('не указан метод класса вызова');	
 			
 			if($argv[2])
