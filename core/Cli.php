@@ -27,7 +27,7 @@ final class Cli
 			if(!$action = $argv[3] = $argv[1]['action'])
 				throw new \Exception('не указан метод класса вызова');	
 			
-			if($argv[2])
+			if(!empty($argv[2]))
 				$argv[2] = static::decode($argv[2]);
 			
 			// вызываем метод
@@ -39,7 +39,10 @@ final class Cli
 			if($argv[2])
 				$params = array_intersect_key($argv[2], array_column((new \ReflectionClass($model))->getMethod($action)->getParameters(), 'name', 'name'));
 						
-			$model->$action(...$params);
+			if($params)			
+				$model->$action(...$params);
+			else
+				$model->$action();
 		}
 	}	
 	
