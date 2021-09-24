@@ -102,13 +102,13 @@ final class Cli
 	// првоерить крон задание
 	public static function check(string $class, string $action=null, array $params = null)
 	{
-		return static::cmd('crontab -u '.get_current_user().' -l | grep "^[0-9*/ ,\-]* php [^ ]* '.static::encode(['class'=>$class, 'action'=>$action]).($params?' '.static::encode($params):'').' > .*$"');
+		return static::cmd('crontab -u '.get_current_user().' -l | grep "^[0-9*/ ,\-]* php [^ ]* '.static::encode(['class'=>$class, 'action'=>$action]).($params?' '.static::encode($params):'').'( > .*$)?$"');
 	}
 	
 	// получить команду Cli уже с вшитым токеном (где указана вызываемая модель и action при необходимости)
 	final static public function get(string $class, string $action, array $params = null, string $output = null, $quiet = false):string
 	{				
-		return "php ".SITE_PATH."/index.php ".static::encode(['class'=>$class, 'action'=>$action]).($params?' '.static::encode($params):'').' > '.($output?SITE_PATH.'/tmp/'.$output.' 2>&1':($quiet?'/dev/null':'')).($quiet?' &':'');		
+		return "php ".SITE_PATH."/index.php ".static::encode(['class'=>$class, 'action'=>$action]).($params?' '.static::encode($params):'').($output||$quiet:' > ':'').($output?SITE_PATH.'/tmp/'.$output.' 2>&1':($quiet?'/dev/null':'')).($quiet?' &':'');;		
 	}	
 	
 	// завершить процесс
