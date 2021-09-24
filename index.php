@@ -1,5 +1,4 @@
 <?php
-declare(strict_types=1);
 setlocale(LC_TIME, 'ru_RU.UTF-8');
 
 // настроить в php.ini - слишком много времени занмиает вызов
@@ -53,7 +52,18 @@ if(PHP_SAPI === 'cli' && $argv[1]) { // cli режим
 
 	if(($file = 'controller/'.ucfirst($page).'Controller.php') && file_exists($file)){
 		if(($class='\\Edisom\\App\\'.$app.'\\controller\\'.ucfirst($page).'Controller') && class_exists($class))
-			$class::getInstance($query)->$action(); // пусть контроллер сам првоеряем сущестсование метода и если его нет что то делает с этим магическими методами (по умолчанию выдаст 404)
+		{
+			// пусть контроллер сам првоеряем сущестсование метода и если его нет что то делает с этим магическими методами (по умолчанию выдаст 404)
+			// именно так. в __construct контроллере он сделаем обработку пришгедших значений 
+			$controller = new $class($query);
+			
+			if($query)
+			{
+				// передадим в метод лишь те параметры (из брауезрной строки, GET и POST) что у него есть в атрибутах (а там уже првоерка типа будет и тп)
+				$query = array_intersect_key($query, array_column((new ReflectionClass($controller))->getMethod($action)->getParameters(), 'name', 'name'));
+			}	
+			$controller->$action(...$query);
+		}
 		else
 			\Edisom\Core\Controller::_404("не найден класс контроллера ".$class.' в фаиле '.$file);
 	}

@@ -10,6 +10,8 @@ final class Cli
 	private function __clone() {}
 	
 	// проверка что пришло из команднйо строки за токен (тока в CLI режиме доступны токены и запуск по КРОН)
+	// только модели можно запускать в кроне (у них реализован getInstance)
+	// првоерять модель ли пытftvcz запустить каждый раз - больно дорогая операция
 	final static public function run()
 	{	
 		global $argv;
@@ -18,33 +20,42 @@ final class Cli
             exit("Only run in command line mode \n");
         }
 		
-		if($array = static::parse($argv[1]))
+		if($argv[1] = static::decode($argv[1]))
 		{
-			call_user_func([$array['class']::getInstance(), ($array['action']?$array['action']:null)]);
+			if(!$argv[1]['class'])
+				throw new \Exception('не указан класс вызова');	
+			if(!$argv[1]['action'])
+				throw new \Exception('не указан метод класса вызова');	
+			
+			if($argv[2])
+				$argv[2] = static::decode($argv[2]);
+			
+			// вызываем метод
+			// если нет $argv[1]['action']  значит передаем все даныне в __construct
+			// если есть - передаем как аргументы метода
+			
+			$model = $argv[1]['class']::getInstance();
+			
+			if($argv[2])
+				$params = array_intersect_key($argv[2], array_column((new ReflectionClass($model))->getMethod($argv[1]['action'])->getParameters(), 'name', 'name'));
+			
+			$model->$argv[1]['action'](...$params);
 		}
 	}	
 	
 	// првоерка токена для данного приложения
-	private static function parse(string $token):array
+	public static function decode(string $data):array
 	{
-		if((!$token = json_decode(base64_decode($token), true)) || !$token['class']){
-			throw new \Exception('токен '.$token.' не корректен');	
-		}
-		
-		return $token;
+		if((!$data = json_decode(base64_decode($data), true))){
+			throw new \Exception('данные '.$data.' не корректены');	
+		}		
+		return $data;
 	}
 	
 	// сгенерировать токен (какое метод запускать в каком приложении с каким экшеном)
-	private static function token(string $class, string $action=null):string
+	public static function encode(array $data):string
 	{
-		$token = array(
-			'class'=>$class
-		);	
-		
-		if($action)
-			$token['action'] = $action;
-		
-		return base64_encode(json_encode($token));
+		return base64_encode(json_encode(array_filter($data), JSON_NUMERIC_CHECK));
 	}
 	
 	// запуск через командную строку
@@ -72,7 +83,7 @@ final class Cli
 	}
 	
 	// добавить крон задание
-	public static function add(string $time, string $class, string $action=null, string $params = null, string $output = null, $quiet = false){
+	public static function add(string $time, string $class, string $action, array $params = null, string $output = null, $quiet = false){
 		static::cmd('crontab -u '.get_current_user().' -l > mycron
 			#echo new cron into cron file
 			echo "'.$time.' '.static::get($class, $action, $params, $output, $quiet).'" >> mycron
@@ -83,21 +94,21 @@ final class Cli
 	}
 	
 	// удалить крон задание
-	public static function delete(string $class, string $action=null, string $params = null)
+	public static function delete(string $class, string $action, array $params = null)
 	{
-		static::cmd('crontab -u '.get_current_user().' -l | grep -v "^[0-9*/ ,\-]* php [^ ]* '.static::token($class, $action).($params?' '.$params:'').' > .*$" | crontab -');
+		static::cmd('crontab -u '.get_current_user().' -l | grep -v "^[0-9*/ ,\-]* php [^ ]* '.static::encode(['class'=>$class, 'action'=>$action]).($params?' '.static::encode($params):'').' > .*$" | crontab -');
 	}
 	
 	// првоерить крон задание
-	public static function check(string $class, string $action=null, string $params = null)
+	public static function check(string $class, string $action=null, array $params = null)
 	{
-		return static::cmd('crontab -u '.get_current_user().' -l | grep "^[0-9*/ ,\-]* php [^ ]* '.static::token($class, $action).($params?' '.$params:'').' > .*$"');
+		return static::cmd('crontab -u '.get_current_user().' -l | grep "^[0-9*/ ,\-]* php [^ ]* '.static::encode(['class'=>$class, 'action'=>$action]).($params?' '.static::encode($params):'').' > .*$"');
 	}
 	
 	// получить команду Cli уже с вшитым токеном (где указана вызываемая модель и action при необходимости)
-	final static public function get(string $class, string $action=null, string $params = null, string $output = null, $quiet = false):string
+	final static public function get(string $class, string $action, array $params = null, string $output = null, $quiet = false):string
 	{				
-		return "php ".SITE_PATH."/index.php ".static::token($class, $action).($params?' '.$params:'').' > '.($output?SITE_PATH.'/tmp/'.$output:'/dev/null').' 2>&1 '.($quiet?'&':'');		
+		return "php ".SITE_PATH."/index.php ".static::encode(['class'=>$class, 'action'=>$action]).($params?' '.static::encode($params):'').' > '.($output?SITE_PATH.'/tmp/'.$output:'/dev/null').' 2>&1 '.($quiet?'&':'');		
 	}	
 	
 	// завершить процесс

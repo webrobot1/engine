@@ -7,7 +7,7 @@ class MysqliAdapter extends Adapters
 	function warning():int{return $this->bd->warning_count; }
 	function last():int{return mysqli_insert_id($this->bd);}
 	function close():void{@mysqli_close($this->bd);}	
-	function escape(string $string):string{ return mysqli_real_escape_string($this->bd, parent::escape($string));}
+	function escape(string $string):string{ return mysqli_real_escape_string($this->bd, static::prepare($string));}
 	
 	
 	function query(string $sql)

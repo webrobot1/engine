@@ -11,7 +11,7 @@ abstract class Model
 
 	private static $adapters = array();	
 	private static $methods = array();	 // дополнительные методы что можно доабвить в класс динамически
-	private static $redis = array();
+	private static \Redis $redis;
 	
 	private static $applications = null;
 	private static $configs = array();
@@ -30,27 +30,7 @@ abstract class Model
 			restore_exception_handler();		
 
 		if(!is_dir(static::temp())) 
-			mkdir(static::temp());
-		
-		if(empty(static::$adapters[static::app()]))
-		{
-			if(
-				static::config('database') 
-					&& 
-				((isset(static::config('database')['adapter']) && ($adapter = static::config('database')['adapter'])) || ($adapter='Edisom\Core\database\MysqliAdapter')) 
-			)
-			{
-				static::$adapters[static::app()] = new $adapter(static::config('database'));
-				unset(static::$configs[static::app()]['database']['password']);
-				
-				// добавим в данный класс методы из адаптера
-				static::addMethod('escape', \Closure::fromCallable([static::$adapters[static::app()], 'escape']));
-				static::addMethod('last', \Closure::fromCallable([static::$adapters[static::app()], 'last']));
-				static::addMethod('tables', \Closure::fromCallable([static::$adapters[static::app()], 'tables']));
-				static::addMethod('warning', \Closure::fromCallable([static::$adapters[static::app()], 'warning']));
-				static::addMethod('affected_rows', \Closure::fromCallable([static::$adapters[static::app()], 'affected_rows']));
-			}				
-		}			
+			mkdir(static::temp());		
 	}
 	
 	// добавляет в приложение новые метод (может быть как аннимной функцией так и методом из другого класса)
@@ -82,14 +62,14 @@ abstract class Model
         return $instances[static::class];
     }	
 		
-	final public static function redis():\Redis
+	final protected static function redis():\Redis
 	{
-		if(!@static::$redis[static::app()] && static::config('redis'))
+		if(static::config('redis'))
 		{
-			static::$redis[static::app()] = new \Redis();			
-			static::$redis[static::app()]->pconnect(static::config('redis')['host'], static::config('redis')['port']);
+			static::$redis = new \Redis();			
+			static::$redis->pconnect(static::config('redis')['host'], static::config('redis')['port']);
 		}		
-		return static::$redis[static::app()];
+		return static::$redis;
 	}
 		
 	// получает информацуию что за приложение для этой модели
@@ -128,7 +108,6 @@ abstract class Model
 		
 	public function exceptionHandler($ex)
 	{
-		echo $ex->getMessage();
 		static::log($ex, 'error.log');
 		exit(EXCEPTION_CODE);
 	}	
@@ -188,6 +167,14 @@ abstract class Model
 		return implode(' '.trim($delimetr).' ', $callback);
 	}	
 	
+	static function escape($string):string
+	{
+		if(!empty(static::$adapters[static::app()]))
+			return static::$adapters[static::app()]->escape($string);
+		else
+			return addslashes(\Edisom\Core\database\Adapters::prepare($string));
+	} 	
+	
 	// Мне нужен Mysql Cache  - поэтому PDO не использую
 	// А это своя обработка значений против SQL инъекций 
 	final public static function prepare(array|string $data = null, $sql = true)
@@ -202,7 +189,7 @@ abstract class Model
 		else
 		{
 			$data = ($data && $sql && !is_numeric($data) && $data!=='' && $data!==null && $data!==false?'"':'').
-					($data!=='' && $data!==null && $data!==false?(!empty(static::$adapters[static::app()])?static::$adapters[static::app()]->escape($data):addslashes(trim($data))):($sql?'NULL':'')).
+					($data!=='' && $data!==null && $data!==false?static::escape($data):($sql?'NULL':'')).
 					($data &&  $sql && !is_numeric($data) && $data!=='' && $data!==null && $data!==false?'"':'');
 
 		}
@@ -213,7 +200,25 @@ abstract class Model
 		
 	final protected static function query($sql, $flag = null)
 	{
-		if(!static::$adapters[static::app()] || !static::$adapters[static::app()]->ping()) return false;	
+		if(empty(static::$adapters[static::app()]))
+		{
+			if(
+				static::config('database') 
+					&& 
+				((isset(static::config('database')['adapter']) && ($adapter = static::config('database')['adapter'])) || ($adapter='Edisom\Core\database\MysqliAdapter')) 
+			)
+			{
+				static::$adapters[static::app()] = new $adapter(static::config('database'));
+				unset(static::$configs[static::app()]['database']['password']);
+				
+				// добавим в данный класс методы из адаптера
+				static::addMethod('last', \Closure::fromCallable([static::$adapters[static::app()], 'last']));
+				static::addMethod('tables', \Closure::fromCallable([static::$adapters[static::app()], 'tables']));
+				static::addMethod('warning', \Closure::fromCallable([static::$adapters[static::app()], 'warning']));
+				static::addMethod('affected_rows', \Closure::fromCallable([static::$adapters[static::app()], 'affected_rows']));
+			}				
+		}
+		elseif(!static::$adapters[static::app()]->ping()) throw new \Exception("Соединение с базой потеряно");
 		
 		###### профилирование во Frontend ########	
 		if(DEFINED("DEBUG") && DEBUG && session_status() === PHP_SESSION_ACTIVE)
@@ -257,7 +262,7 @@ abstract class Model
 			static::$adapters[static::app()]->free_result($result);
 		}
 		else
-			$content = static::$adapters[static::app()]->affected_rows();
+			$content = $this->affected_rows();
 
 		###### профилирование во Frontend ########	
 		if(DEFINED("DEBUG") && DEBUG && session_status() === PHP_SESSION_ACTIVE){

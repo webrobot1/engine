@@ -3,10 +3,10 @@ namespace Edisom\Core;
 
 abstract class Backend extends Frontend 
 {	
-	protected function __construct(string $query = null)
+	public function __construct(string &$query = null)
 	{	
 		parent::__construct($query);	
-		
+	
 		// todo plugin систему сделать	
 		
 		############шаблонизатор###############
@@ -23,7 +23,8 @@ abstract class Backend extends Frontend
 		if((($login = $this->login) || ($login = $_SESSION['login'])) && (($this->password && ($hash = md5(trim($this->password)))) || ($hash = $_SESSION['hash']) || ($password = $_SESSION['password']))){
 			$userModel = \Edisom\App\user\model\BackendModel::getInstance(); 
 			
-			if($user = $userModel->login($login, $hash, $password)){
+			if($user = $userModel->login($login, $hash, $password))
+			{
 				$this->view->assign('user', $user); 
 				DEFINE('USER', $user); // пустой или нет но объявим что бы не обращаться к несуществующей константе
 				

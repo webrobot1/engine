@@ -24,5 +24,5 @@ abstract class Adapters
 	abstract function warning():int;
 	abstract function affected_rows():int;
 	
-	function escape(string $string):string{ return str_replace(array('\r', '\n', '\t', "\'", '\"'), array("\r", "\n", "\t", "'", '"'), trim($string));}
+	static function prepare(string $string):string{ return str_replace(array('\r', '\n', '\t', "\'", '\"'), array("\r", "\n", "\t", "'", '"'), trim($string));}
 }

@@ -8,7 +8,11 @@ abstract class Frontend extends Controller
 			
 	// вообще можно делать все без query и писать просто в GET
 	// но я решил делать с этим изначально кодируя get переменные в виде части адресной строки json (и base64 ее дополнительно)
-	protected function __construct(string $query = null)
+	// query - необязательный пакет с параметрами (полезен когда в Cli режиме идет все) 
+	// те есть GET есть POST а есть этот пакет являющийся частью адресной строки
+	// сделан что бы скрыть от пользователя что там за парметры мы передаем (те не голым GET)
+	// нуждается в кодировании  и декодировании из вне (если вход через Frontend или Api контроллер - там Json )
+	public function __construct(string &$query = null)
 	{	 
 		session_start();	
 		unset($_SESSION['profiling']);
@@ -20,11 +24,16 @@ abstract class Frontend extends Controller
 			else
 				$query = json_decode(urldecode($query), true);
 		}
-				
+		
+		if(isset($_SERVER['REQUEST_METHOD']) && $_SERVER['REQUEST_METHOD'] == 'PUT')
+			$_POST['request'] = file_get_contents("php://input");
+		
+		$query = array_replace_recursive((array)$query, (array)$_GET, (array)$_POST);	
+		
 		// а теперь запишем из адресной строки параметры (я их в json пакую)
-		parent::__construct($query);	
+		parent::__construct($query);
 	
-		$this->view = Template::getInstance();
+		$this->view = new Template();
 		$this->view->compile_dir = $this->model::temp().'/compiled/';
 		$this->view->cache_dir = $this->model::temp().'/cache/';
 				
@@ -51,6 +60,15 @@ abstract class Frontend extends Controller
 			echo $ex->getMessage();
 		exit(EXCEPTION_CODE);
 	}
+	
+	// все POST и GET данные суем в $this->  заодно подготавливая их для работы с Mysql
+	public function __set($key, $var) 
+	{ 	
+		parent::__set($key, $var);		
+		// для smarty добавить из декодированной адресной строки переменные
+		if(empty($_POST[$key]))
+			$_GET[$key] = $this->$key;	
+    }
 	
 	public static function _404($message)
 	{

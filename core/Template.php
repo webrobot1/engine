@@ -6,22 +6,11 @@ use \Edisom\App\help\model\BackendModel as Translate;
 // может использоваться как адаптер для других шабьлонизиторов
 class Template extends \Smarty
 {	
-	static $instances = null;
 	public static $backend = false;
-	
-    public static function getInstance()
-    {
-        if (!isset(self::$instances)) {
-            self::$instances = new static();
-        }
-
-        return self::$instances;
-    }	
-	
-	private function __construct()
+		
+	public function __construct()
     {
 		parent::__construct();
-
 		$this->registerPlugin('modifier', "set_query", array($this, 'set_query'));		
 	}
 	
@@ -130,9 +119,9 @@ class Template extends \Smarty
 		if($newGetVars = array_filter($newGetVars))
 		{		
 			if(!DEFINED("DEBUG") || !DEBUG)
-				$RenderedURL .= base64_encode(json_encode($newGetVars,JSON_UNESCAPED_UNICODE));
+				$RenderedURL .= base64_encode(json_encode($newGetVars, JSON_UNESCAPED_UNICODE|JSON_NUMERIC_CHECK));
 			else
-				$RenderedURL .= urlencode(json_encode($newGetVars,JSON_UNESCAPED_UNICODE));
+				$RenderedURL .= urlencode(json_encode($newGetVars, JSON_UNESCAPED_UNICODE|JSON_NUMERIC_CHECK));
 		}
 
 		if(!empty(getallheaders()['X-Requested-With']) && $_SESSION['HTTP_REFERER'])	

@@ -6,7 +6,7 @@ class PostgreAdapter extends Adapters
 	function warning():int{return $this->bd->warning_count; }
 	function last():int{return mysqli_insert_id($this->bd);}
 	function close():void{@pg_close($this->bd);}
-	function escape(string $string):string{ return pg_escape_string($this->bd, parent::escape($string));}
+	function escape(string $string):string{ return pg_escape_string($this->bd, parent::prepare($string));}
 	
 	function query(string $sql)
 	{
