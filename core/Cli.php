@@ -24,7 +24,7 @@ final class Cli
 		{
 			if(!$argv[1]['class'])
 				throw new \Exception('не указан класс вызова');	
-			if(!$argv[1]['action'])
+			if(!$action = $argv[1]['action'])
 				throw new \Exception('не указан метод класса вызова');	
 			
 			if($argv[2])
@@ -37,9 +37,9 @@ final class Cli
 			$model = $argv[1]['class']::getInstance();
 			
 			if($argv[2])
-				$params = array_intersect_key($argv[2], array_column((new \ReflectionClass($model))->getMethod($argv[1]['action'])->getParameters(), 'name', 'name'));
-			
-			$model->$argv[1]['action'](...$params);
+				$params = array_intersect_key($argv[2], array_column((new \ReflectionClass($model))->getMethod($action)->getParameters(), 'name', 'name'));
+						
+			$model->$action(...$params);
 		}
 	}	
 	
