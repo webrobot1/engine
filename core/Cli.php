@@ -37,7 +37,7 @@ final class Cli
 			$model = $argv[1]['class']::getInstance();
 			
 			if($argv[2])
-				$params = array_intersect_key($argv[2], array_column((new ReflectionClass($model))->getMethod($argv[1]['action'])->getParameters(), 'name', 'name'));
+				$params = array_intersect_key($argv[2], array_column((new \ReflectionClass($model))->getMethod($argv[1]['action'])->getParameters(), 'name', 'name'));
 			
 			$model->$argv[1]['action'](...$params);
 		}
