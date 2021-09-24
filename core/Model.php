@@ -264,7 +264,7 @@ abstract class Model
 			static::$adapters[static::app()]->free_result($result);
 		}
 		else
-			$content = $this->affected_rows();
+			$content = static::$adapters[static::app()]->affected_rows();
 
 		###### профилирование во Frontend ########	
 		if(DEFINED("DEBUG") && DEBUG && session_status() === PHP_SESSION_ACTIVE){
