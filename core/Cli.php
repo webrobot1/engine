@@ -72,10 +72,10 @@ final class Cli
 	}
 	
 	// добавить крон задание
-	public static function add(string $time, string $class, string $action=null, string $params = null, string $output = null){
+	public static function add(string $time, string $class, string $action=null, string $params = null, string $output = null, $quiet = false){
 		static::cmd('crontab -u '.get_current_user().' -l > mycron
 			#echo new cron into cron file
-			echo "'.$time.' '.static::get($class, $action, $params, $output).'" >> mycron
+			echo "'.$time.' '.static::get($class, $action, $params, $output, $quiet).'" >> mycron
 			#install new cron file
 			crontab -u '.get_current_user().' mycron
 			rm mycron'
