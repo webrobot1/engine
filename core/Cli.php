@@ -24,25 +24,10 @@ final class Cli
 		{
 			if(!$argv[1]['class'])
 				throw new \Exception('не указан класс вызова');	
-			if(!$action = $argv[3] = $argv[1]['action'])
+			if(!$argv[1]['action'])
 				throw new \Exception('не указан метод класса вызова');	
 			
-			if(!empty($argv[2]))
-				$argv[2] = static::decode($argv[2]);
-			
-			// вызываем метод
-			// если нет $argv[1]['action']  значит передаем все даныне в __construct
-			// если есть - передаем как аргументы метода
-			
-			$model = $argv[1]['class']::getInstance();
-			
-			if($argv[2])
-				$params = array_intersect_key($argv[2], array_column((new \ReflectionClass($model))->getMethod($action)->getParameters(), 'name', 'name'));
-						
-			if($params)			
-				$model->$action(...$params);
-			else
-				$model->$action();
+			call_user_func([$argv[1]['class']::getInstance(), $argv[1]['action']]);
 		}
 	}	
 	
