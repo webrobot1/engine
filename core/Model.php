@@ -49,12 +49,12 @@ abstract class Model
 	
 	final function __clone(){}
 		
-	final public static function getInstance():static
+	final public static function getInstance(...$arg):static
 	{	
         if (!isset($instances[static::class]))
         {
 			if(class_exists(static::class))
-				$instances[static::class] = new (static::class)();
+				$instances[static::class] = new (static::class)(...$arg);
 			else
 				throw new \Exception("не найден class instance:".static::class);
         }
