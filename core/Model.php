@@ -342,10 +342,8 @@ abstract class Model
 			$count = 0;
 			while(file_exists($dir.$name))
 			{
-				$name = $count.$name;
 				$count++;
-				if($count>100)
-					throw new \Exception($count.' интераций для '.$name);
+				$name = $count.$name;			
 			}
 		}
 		
