@@ -329,18 +329,24 @@ abstract class Model
 		return $curlResponse;
 	}  
 	
-	final public static function upload(string $tmp_name, string $name, bool $override = false)
+	final public static function upload(string $tmp_name, string $name, string $app = null, bool $override = false)
 	{
 		$name = basename(trim($name));
-		$dir = SITE_PATH."/data/".static::app().'/';
+		$dir = SITE_PATH."/data/".($app?$app:static::app()).'/';
 		
 		if(!file_exists($dir))
 			mkdir($dir);
 		
 		if(!$override)
 		{
+			$count = 0;
 			while(file_exists($dir.$name))
-				$name = rand(0,9).$name;
+			{
+				$name = $count.$name;
+				$count++;
+				if($count>100)
+					throw new \Exception($count.' интераций для '.$name);
+			}
 		}
 		
 		if(substr($tmp_name, 0, 4)!='http' && move_uploaded_file($tmp_name, $dir.$name)!==false)

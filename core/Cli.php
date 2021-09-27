@@ -90,7 +90,7 @@ final class Cli
 	// првоерить крон задание
 	public static function check(string $class, string $action=null, string $params = null)
 	{
-		return static::cmd('crontab -u '.get_current_user().' -l | grep "^[0-9*/ ,\-]* php [^ ]* '.static::encode(['class'=>$class, 'action'=>$action]).($params?' '.$params:'').'( > .*$)?$"');
+		return static::cmd('crontab -u '.get_current_user().' -l | grep "^[0-9*/ ,\-]* php [^ ]* '.static::encode(['class'=>$class, 'action'=>$action]).($params?' '.$params:'').'\( >.*\)\?$"');
 	}
 	
 	// получить команду Cli уже с вшитым токеном (где указана вызываемая модель и action при необходимости)
