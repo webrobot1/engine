@@ -332,7 +332,7 @@ abstract class Model
 	final public static function upload(string $tmp_name, string $name, bool $override = false)
 	{
 		$name = basename(trim($name));
-		$dir = SITE_PATH."/data/".($app?$app:static::app()).'/';
+		$dir = SITE_PATH."/data/".static::app().'/';
 		
 		if(!file_exists($dir))
 			mkdir($dir);
