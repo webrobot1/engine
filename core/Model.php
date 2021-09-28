@@ -329,7 +329,7 @@ abstract class Model
 		return $curlResponse;
 	}  
 	
-	final public static function upload(string $tmp_name, string $name, string $app = null, bool $override = false)
+	final public static function upload(string $tmp_name, string $name, bool $override = false)
 	{
 		$name = basename(trim($name));
 		$dir = SITE_PATH."/data/".($app?$app:static::app()).'/';
